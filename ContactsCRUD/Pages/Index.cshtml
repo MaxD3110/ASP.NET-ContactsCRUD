@@ -1,0 +1,117 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<header>
+    <div style="text-align: center">
+        <a @@click="newContact()" href="#popUp" class="createlink">Create new contact</a>
+    </div>
+</header>
+
+@section scripts{
+    <script>
+        $(function () {
+
+            $('#BDay').datepicker({ dateFormat: 'dd.mm.yy' });
+
+        });
+    </script>
+}
+
+<div class="text-center">
+
+    <div class="container">
+        <div v-for="(contact, index) in contacts">
+            <div class="card">
+                <div class="box">
+                    <div class="content">
+                        <h3>{{contact.name}}</h3>
+                        <p>{{contact.jobTitle}}</p>
+                        <p>{{contact.mobilePhone}}</p>
+                        <p>{{contact.birthDate}}</p>
+                        <a @@click="editContact(contact.id, index)" href="#popUp" id="openPopUp">Edit</a>
+                        <a @@click="editContact(contact.id, index)" href="#popUpDelete" id="openPopUp">Delete</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <aside id="popUp" class="popup">
+        <div class="popUpContainer">
+            <header>
+                <a href="#!" class="closePopUp">X</a>
+                <h2 v-if="!selectedContact">Create new contact</h2>
+                <h2 v-else>Edit contact</h2>
+            </header>
+            <article id="validateForm" style="text-align: left;">
+                <div style="padding: 15px; display: flex; flex-flow: column;">
+                    <div class="field field_v1">
+                        <label for="name" class="ha-screen-reader">Name</label>
+                        <input id="name" class="field__input" placeholder="e.g. Stanislav" v-model="contactModel.name">
+                        <span class="field__label-wrap" aria-hidden="true">
+                            <span class="field__label">Name</span>
+                        </span>
+                        <small></small>
+                    </div>
+                    <p></p>
+                    <div class="field field_v1">
+                        <label for="mPhone" class="ha-screen-reader">Phone</label>
+                        <input id="mPhone" class="field__input" placeholder="e.g. +375333428289" v-model="contactModel.mobilePhone">
+                        <span class="field__label-wrap" aria-hidden="true">
+                            <span class="field__label">Phone</span>
+                        </span>
+                        <small></small>
+                    </div>
+                    <p></p>
+                    <div class="field field_v1">
+                        <label for="jTitle" class="ha-screen-reader">Position</label>
+                        <input id="jTitle" class="field__input" placeholder="e.g. .Net/jS Dev" v-model="contactModel.jobTitle">
+                        <span class="field__label-wrap" aria-hidden="true">
+                            <span class="field__label">Position</span>
+                        </span>
+                        <small></small>
+                    </div>
+                    <p></p>
+                    <div class="field field_v1">
+                        <label for="BDay" class="ha-screen-reader">Birth Date</label>
+                        <input id="BDay" class="field__input" readonly v-model="contactModel.birthDate">
+                        <span class="field__label-wrap" aria-hidden="true">
+                            <span class="field__label">Birth Date</span>
+                        </span>
+                        <small></small>
+                    </div>
+                    <p></p>
+                </div>
+
+
+                <div style="text-align: center;">
+                    <a v-if="!selectedContact" @@click="isValidData(validateForm())" class="savebutton">Create</a>
+                    <a v-else @@click="isValidData(validateForm())" class="savebutton">Save</a>
+                </div>
+            </article>
+        </div>
+        <a href="#!" class="closePopUpOutSide"></a>
+    </aside>
+
+    <aside id="popUpDelete" class="popup">
+        <div class="popUpContainer">
+            <header>
+                <h2>Delete (forever)?</h2>
+            </header>
+            <article style="text-align: left;">
+
+                <div style="text-align: center;">
+                    <a @@click="deleteContact(selectedContact.id)" class="savebutton" href="#!">Save</a>
+                    <p></p>
+                    <a href="#!" class="cancelbutton">Cancel</a>
+                </div>
+            </article>
+        </div>
+        <a href="#!" class="closePopUpOutSide"></a>
+    </aside>
+   
+</div>
+
